@@ -3,5 +3,5 @@
 
 int main() {
 	cl_uint num_platforms;
-	return !(clGetPlatformIDs(0, nullptr, &num_platforms) == CL_SUCCESS);
+	return !(clGetPlatformIDs(0, NULL, &num_platforms) == CL_SUCCESS);
 }
