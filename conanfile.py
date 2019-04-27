@@ -4,12 +4,12 @@ from conans import ConanFile, CMake, tools
 import os
 
 
-class OpenCLICDLoaderConan(ConanFile):
-    name = "opencl-icd-loader"
+class KhronosOpenCLICDLoaderConan(ConanFile):
+    name = "khronos-opencl-icd-loader"
     version = "20190412"
     description = "The OpenCL ICD Loader"
     topics = ("conan", "opencl", "opencl-icd-loader", "build-system", "icd-loader")
-    url = "https://github.com/bincrafters/conan-opencl-icd-loader"
+    url = "https://github.com/bincrafters/conan-khronos-opencl-icd-loader"
     homepage = "https://github.com/KhronosGroup/OpenCL-ICD-Loader"
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "Apache-2.0"
@@ -19,7 +19,7 @@ class OpenCLICDLoaderConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"fPIC": [True, False], "shared": [True, False]}
     default_options = {"fPIC": True, "shared": False}
-    requires = "opencl-headers/20190412@bincrafters/stable"
+    requires = "khronos-opencl-headers/20190412@bincrafters/stable"
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
 
@@ -39,7 +39,6 @@ class OpenCLICDLoaderConan(ConanFile):
 
     def _configure_cmake(self):
         cmake = CMake(self)
-        cmake.definitions["OPENCL_INCLUDE_DIRS"] = ";".join(self.deps_cpp_info["opencl-headers"].include_paths)
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
 

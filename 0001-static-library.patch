@@ -1,7 +1,13 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5a271ea..496e889 100644
+index 5a271ea..cbc1eb3 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.6)
++cmake_minimum_required (VERSION 2.8.11)
+ 
+ project (OPENCL_ICD_LOADER)
+ 
 @@ -30,7 +30,6 @@ project (OPENCL_ICD_LOADER)
  # may be useful to simplify the build and distribution of the application. E.g.
  # in test farms, or in cases where the end-user system configs are known in
@@ -10,15 +16,23 @@ index 5a271ea..496e889 100644
  
  set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
  set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-@@ -52,7 +51,7 @@ endif ()
+@@ -50,13 +49,13 @@ if (NOT DEFINED OPENCL_INCLUDE_DIRS)
+     set (OPENCL_INCLUDE_DIRS ./inc)
+ endif ()
  
- include_directories (${OPENCL_INCLUDE_DIRS})
+-include_directories (${OPENCL_INCLUDE_DIRS})
  
 -add_library (OpenCL SHARED ${OPENCL_ICD_LOADER_SOURCES})
 +add_library (OpenCL ${OPENCL_ICD_LOADER_SOURCES})
  set_target_properties (OpenCL PROPERTIES VERSION "1.2" SOVERSION "1")
++target_include_directories (OpenCL PRIVATE ${OPENCL_INCLUDE_DIRS} ${CONAN_INCLUDE_DIRS_KHRONOS-OPENCL-HEADERS})
  
  if (WIN32)
+-    target_link_libraries (OpenCL cfgmgr32.lib)
++    target_link_libraries (OpenCL PUBLIC cfgmgr32.lib)
+     string(REPLACE "/MD" "/MT" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+     string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+     string(REPLACE "/MD" "/MT" CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL}")
 @@ -75,5 +74,9 @@ endif ()
  
  target_link_libraries (OpenCL ${CMAKE_DL_LIBS})

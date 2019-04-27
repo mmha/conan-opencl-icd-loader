@@ -2,7 +2,7 @@
 
 | Bintray | Windows | Linux & macOS |
 |:--------:|:---------:|:-----------------:|
-|[![Download](https://api.bintray.com/packages/bincrafters/public-conan/opencl-icd-loader%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/opencl-icd-loader%3Abincrafters/_latestVersion)|[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-opencl-icd-loader?svg=true)](https://ci.appveyor.com/project/bincrafters/conan-opencl-icd-loader)|[![Build Status](https://travis-ci.com/bincrafters/conan-opencl-icd-loader.svg)](https://travis-ci.com/bincrafters/conan-opencl-icd-loader)|
+|[![Download](https://api.bintray.com/packages/bincrafters/public-conan/khronos-opencl-icd-loader%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/khronos-opencl-icd-loader%3Abincrafters/_latestVersion)|[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-khronos-opencl-icd-loader?svg=true)](https://ci.appveyor.com/project/bincrafters/conan-khronos-opencl-icd-loader)|[![Build Status](https://travis-ci.com/bincrafters/conan-khronos-opencl-icd-loader.svg)](https://travis-ci.com/bincrafters/conan-khronos-opencl-icd-loader)|
 
 ## Conan Information
 
