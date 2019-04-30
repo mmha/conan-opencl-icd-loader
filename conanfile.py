@@ -8,13 +8,19 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
     name = "khronos-opencl-icd-loader"
     version = "20190412"
     description = "The OpenCL ICD Loader"
-    topics = ("conan", "opencl", "opencl-icd-loader", "build-system", "icd-loader")
+    topics = ("conan", "opencl", "opencl-icd-loader", "build-system",
+              "icd-loader")
     url = "https://github.com/bincrafters/conan-khronos-opencl-icd-loader"
     homepage = "https://github.com/KhronosGroup/OpenCL-ICD-Loader"
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "Apache-2.0"
     exports = ["LICENSE.md"]
-    exports_sources = ["CMakeLists.txt", "0001-static-library.patch"]
+    exports_sources = [
+        "CMakeLists.txt", "0001-static-library.patch",
+        "0002-Work-around-missing-declarations-in-MinGW-headers.patch",
+        "0003-Don-t-include-MS-DX-SDK-headers-for-MinGW.patch",
+        "0004-Set-CMAKE_C_STANDARD.patch"
+    ]
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"fPIC": [True, False], "shared": [True, False]}
@@ -33,7 +39,8 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
     def source(self):
         commit = "66ecca5dce2c4425a48bdb0cf0de606e4da43ab5"
         sha256 = "3af9efaf9ebc68e1fb18b7904ec71004a9e71cf074e2ce70b719382b65f2b609"
-        tools.get("{0}/archive/{1}.tar.gz".format(self.homepage, commit), sha256=sha256)
+        tools.get("{0}/archive/{1}.tar.gz".format(self.homepage, commit),
+                  sha256=sha256)
         extracted_dir = "OpenCL-ICD-Loader-" + commit
         os.rename(extracted_dir, self._source_subfolder)
 
@@ -42,13 +49,33 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
 
+    def _is_mingw(self):
+        subsystem_matches = self.settings.get_safe("os.subsystem") in [
+            "msys", "msys2"
+        ]
+        compiler_matches = self.settings.os == "Windows" and self.settings.compiler == "gcc"
+        return subsystem_matches or compiler_matches
+
     def build(self):
-        tools.patch(base_path=self._source_subfolder, patch_file="0001-static-library.patch")
+        tools.patch(base_path=self._source_subfolder,
+                    patch_file="0001-static-library.patch")
+        if self._is_mingw():
+            tools.patch(
+                base_path=self._source_subfolder,
+                patch_file=
+                "0002-Work-around-missing-declarations-in-MinGW-headers.patch")
+            tools.patch(base_path=self._source_subfolder,
+                        patch_file=
+                        "0003-Don-t-include-MS-DX-SDK-headers-for-MinGW.patch")
+            tools.patch(base_path=self._source_subfolder,
+                        patch_file="0004-Set-CMAKE_C_STANDARD.patch")
         cmake = self._configure_cmake()
         cmake.build()
 
     def package(self):
-        self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
+        self.copy(pattern="LICENSE",
+                  dst="licenses",
+                  src=self._source_subfolder)
         cmake = self._configure_cmake()
         cmake.install()
 
@@ -57,5 +84,5 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
         if self.settings.os == "Linux":
             self.cpp_info.libs.extend(["pthread", "dl"])
         elif self.settings.os == "Windows" and \
-             self.settings.compiler == "Visual Studio":
+             self.settings.get_safe("os.subsystem") != "wsl":
             self.cpp_info.libs.append("cfgmgr32")
