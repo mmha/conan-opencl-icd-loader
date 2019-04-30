@@ -14,7 +14,7 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "Apache-2.0"
     exports = ["LICENSE.md"]
-    exports_sources = ["CMakeLists.txt", "0001-static-library.patch"]
+    exports_sources = ["CMakeLists.txt", "0001-static-library.patch", "0002-Work-around-missing-declarations-in-MinGW-headers.patch"]
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"fPIC": [True, False], "shared": [True, False]}
@@ -44,6 +44,8 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
 
     def build(self):
         tools.patch(base_path=self._source_subfolder, patch_file="0001-static-library.patch")
+        if self.settings.get_safe("os.subsystem") in ["msys", "msys2"]:
+            tools.patch(base_path=self._source_subfolder, patch_file="0002-Work-around-missing-declarations-in-MinGW-headers.patch")
         cmake = self._configure_cmake()
         cmake.build()
 
@@ -57,5 +59,5 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
         if self.settings.os == "Linux":
             self.cpp_info.libs.extend(["pthread", "dl"])
         elif self.settings.os == "Windows" and \
-             self.settings.compiler == "Visual Studio":
+             self.settings.get_safe("os.subsystem") != "wsl":
             self.cpp_info.libs.append("cfgmgr32")
