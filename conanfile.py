@@ -17,7 +17,8 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
     exports = ["LICENSE.md"]
     exports_sources = [
         "CMakeLists.txt", "0001-static-library.patch",
-        "0002-Work-around-missing-declarations-in-MinGW-headers.patch"
+        "0002-Work-around-missing-declarations-in-MinGW-headers.patch",
+        "0003-Don-t-include-MS-DX-SDK-headers-for-MinGW.patch"
     ]
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
@@ -55,6 +56,9 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
                 base_path=self._source_subfolder,
                 patch_file=
                 "0002-Work-around-missing-declarations-in-MinGW-headers.patch")
+            tools.patch(base_path=self._source_subfolder,
+                        patch_file=
+                        "0003-Don-t-include-MS-DX-SDK-headers-for-MinGW.patch")
         cmake = self._configure_cmake()
         cmake.build()
 
