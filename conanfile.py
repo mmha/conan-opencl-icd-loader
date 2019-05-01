@@ -48,10 +48,17 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
 
+    def _is_mingw(self):
+        subsystem_matches = self.settings.get_safe("os.subsystem") in [
+            "msys", "msys2"
+        ]
+        compiler_matches = self.settings.os == "Windows" and self.settings.compiler == "gcc"
+        return subsystem_matches or compiler_matches
+
     def build(self):
         tools.patch(base_path=self._source_subfolder,
                     patch_file="0001-static-library.patch")
-        if self.settings.get_safe("os.subsystem") in ["msys", "msys2"]:
+        if self._is_mingw():
             tools.patch(
                 base_path=self._source_subfolder,
                 patch_file=
