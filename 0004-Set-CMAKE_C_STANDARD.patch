@@ -1,6 +1,6 @@
-From dfab7547a5fe764dcea769f54bc2864c17faf2bb Mon Sep 17 00:00:00 2001
+From 0c522e5cedefec055db5dcb1872d9a52ae94bebc Mon Sep 17 00:00:00 2001
 From: Morris Hafner <hafnermorris@gmail.com>
-Date: Wed, 1 May 2019 02:51:03 +0100
+Date: Tue, 7 May 2019 23:33:51 +0100
 Subject: [PATCH] Set CMAKE_C_STANDARD
 
 ---
@@ -8,25 +8,22 @@ Subject: [PATCH] Set CMAKE_C_STANDARD
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 67a2b51..12050b3 100644
+index 580d264..43a03ec 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1,4 +1,4 @@
+@@ -1,8 +1,11 @@
 -cmake_minimum_required (VERSION 2.8.11)
 +cmake_minimum_required (VERSION 3.1)
  
  project (OPENCL_ICD_LOADER)
- 
-@@ -31,6 +31,9 @@ project (OPENCL_ICD_LOADER)
- # in test farms, or in cases where the end-user system configs are known in
- # advance. Use it with discretion.
+ find_package (Threads REQUIRED)
  
 +set(CMAKE_C_STANDARD 99)
 +set(CMAKE_C_STANDARD_REQUIRED ON)
 +
- set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
- set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
- 
+ # The option below allows building the ICD Loader library as a shared library
+ # (ON, default) or a static library (OFF).
+ #
 -- 
 2.21.0
 
