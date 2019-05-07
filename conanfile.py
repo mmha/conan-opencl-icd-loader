@@ -6,7 +6,7 @@ import os
 
 class KhronosOpenCLICDLoaderConan(ConanFile):
     name = "khronos-opencl-icd-loader"
-    version = "20190412"
+    version = "20190507"
     description = "The OpenCL ICD Loader"
     topics = ("conan", "opencl", "opencl-icd-loader", "build-system",
               "icd-loader")
@@ -16,7 +16,8 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
     license = "Apache-2.0"
     exports = ["LICENSE.md"]
     exports_sources = [
-        "CMakeLists.txt", "0001-static-library.patch",
+        "CMakeLists.txt",
+        "0001-OpenCL-Headers-Remove-ABI-hackery.patch",
         "0002-Work-around-missing-declarations-in-MinGW-headers.patch",
         "0003-Don-t-include-MS-DX-SDK-headers-for-MinGW.patch",
         "0004-Set-CMAKE_C_STANDARD.patch"
@@ -26,6 +27,7 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
     options = {"fPIC": [True, False], "shared": [True, False]}
     default_options = {"fPIC": True, "shared": False}
     requires = "khronos-opencl-headers/20190412@bincrafters/stable"
+    short_paths = True
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
 
@@ -37,8 +39,8 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
         del self.settings.compiler.libcxx
 
     def source(self):
-        commit = "66ecca5dce2c4425a48bdb0cf0de606e4da43ab5"
-        sha256 = "3af9efaf9ebc68e1fb18b7904ec71004a9e71cf074e2ce70b719382b65f2b609"
+        commit = "7d2584c4b8b1ac186f67143aaa2f846184709a9e"
+        sha256 = "d062314fdde84ab875aae54bd6fe9ce29cca7f13b46cf78e345137c2905ba54d"
         tools.get("{0}/archive/{1}.tar.gz".format(self.homepage, commit),
                   sha256=sha256)
         extracted_dir = "OpenCL-ICD-Loader-" + commit
@@ -58,15 +60,16 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
 
     def build(self):
         tools.patch(base_path=self._source_subfolder,
-                    patch_file="0001-static-library.patch")
+                    patch_file="0001-OpenCL-Headers-Remove-ABI-hackery.patch")
         if self._is_mingw():
             tools.patch(
                 base_path=self._source_subfolder,
                 patch_file=
                 "0002-Work-around-missing-declarations-in-MinGW-headers.patch")
-            tools.patch(base_path=self._source_subfolder,
-                        patch_file=
-                        "0003-Don-t-include-MS-DX-SDK-headers-for-MinGW.patch")
+            tools.patch(
+                base_path=self._source_subfolder,
+                patch_file=
+                "0003-Don-t-include-MS-DX-SDK-headers-for-MinGW.patch")
             tools.patch(base_path=self._source_subfolder,
                         patch_file="0004-Set-CMAKE_C_STANDARD.patch")
         cmake = self._configure_cmake()

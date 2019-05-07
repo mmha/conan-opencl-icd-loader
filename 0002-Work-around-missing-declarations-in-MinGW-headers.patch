@@ -1,16 +1,16 @@
-From a960c68a7ddee64d6a4665ba9e961d9cb9adaa18 Mon Sep 17 00:00:00 2001
+From 84e61e758bf3eeb0763231d171e4a77a98d2dc6b Mon Sep 17 00:00:00 2001
 From: Morris Hafner <hafnermorris@gmail.com>
-Date: Wed, 1 May 2019 01:30:02 +0100
+Date: Tue, 7 May 2019 23:31:19 +0100
 Subject: [PATCH] Work around missing declarations in MinGW headers
 
 ---
- icd_windows_hkr.c | 27 ++++++++++++++++++++++++++-
+ loader/windows/icd_windows_hkr.c | 27 ++++++++++++++++++++++++++-
  1 file changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/icd_windows_hkr.c b/icd_windows_hkr.c
-index 5f6c534..240c2f7 100644
---- a/icd_windows_hkr.c
-+++ b/icd_windows_hkr.c
+diff --git a/loader/windows/icd_windows_hkr.c b/loader/windows/icd_windows_hkr.c
+index 5f6c534..737aaad 100644
+--- a/loader/windows/icd_windows_hkr.c
++++ b/loader/windows/icd_windows_hkr.c
 @@ -23,9 +23,34 @@
  #include <assert.h>
  #include <stdbool.h>

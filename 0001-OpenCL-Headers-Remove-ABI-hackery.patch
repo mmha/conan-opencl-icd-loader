@@ -1,0 +1,41 @@
+From d2ecb7bf54aaf0716009d1bbf20684a7d91c9b4e Mon Sep 17 00:00:00 2001
+From: Morris Hafner <hafnermorris@gmail.com>
+Date: Tue, 7 May 2019 23:26:09 +0100
+Subject: [PATCH] OpenCL Headers, Remove ABI hackery
+
+---
+ CMakeLists.txt | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c750916..580d264 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -55,23 +55,13 @@ else ()
+         loader/linux/icd_exports.map)
+ endif ()
+ 
+-set (OPENCL_ICD_LOADER_HEADERS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/inc CACHE PATH "Path to OpenCL Headers")
++set (OPENCL_ICD_LOADER_HEADERS_DIR ${CONAN_INCLUDE_DIRS_KHRONOS-OPENCL-HEADERS} CACHE PATH "Path to OpenCL Headers")
+ 
+ add_library (OpenCL ${OPENCL_ICD_LOADER_SOURCES})
+ set_target_properties (OpenCL PROPERTIES VERSION "1.2" SOVERSION "1")
+ 
+ if (WIN32)
+     target_link_libraries (OpenCL cfgmgr32.lib)
+-    if(NOT USE_DYNAMIC_VCXX_RUNTIME)
+-        string(REPLACE "/MD" "/MT" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+-        string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+-        string(REPLACE "/MD" "/MT" CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL}")
+-        string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL}")
+-        string(REPLACE "/MD" "/MT" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+-        string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+-        string(REPLACE "/MDd" "/MTd" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+-        string(REPLACE "/MDd" "/MTd" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+-    endif()
+ else()
+     if (APPLE)
+         target_link_libraries (OpenCL ${CMAKE_THREAD_LIBS_INIT})
+-- 
+2.21.0
+
