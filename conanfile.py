@@ -6,7 +6,7 @@ import os
 
 class KhronosOpenCLICDLoaderConan(ConanFile):
     name = "khronos-opencl-icd-loader"
-    version = "20190507"
+    version = "20190701"
     description = "The OpenCL ICD Loader"
     topics = ("conan", "opencl", "opencl-icd-loader", "build-system",
               "icd-loader")
@@ -26,7 +26,7 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"fPIC": [True, False], "shared": [True, False]}
     default_options = {"fPIC": True, "shared": False}
-    requires = "khronos-opencl-headers/20190412@bincrafters/stable"
+    requires = "khronos-opencl-headers/20190502@bincrafters/stable"
     short_paths = True
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
@@ -39,8 +39,8 @@ class KhronosOpenCLICDLoaderConan(ConanFile):
         del self.settings.compiler.libcxx
 
     def source(self):
-        commit = "7d2584c4b8b1ac186f67143aaa2f846184709a9e"
-        sha256 = "d062314fdde84ab875aae54bd6fe9ce29cca7f13b46cf78e345137c2905ba54d"
+        commit = "467f28628fbca25f334c56422a4bfe116912bb22"
+        sha256 = "4d807a797b00093362a792ffd231dc77029019f9fd27bf4bbed99847050565a3"
         tools.get("{0}/archive/{1}.tar.gz".format(self.homepage, commit),
                   sha256=sha256)
         extracted_dir = "OpenCL-ICD-Loader-" + commit
